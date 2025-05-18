@@ -1,0 +1,123 @@
+import java.util.Scanner;
+
+public class HotelReservationSystem {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        int[] standardRooms = new int[5];  
+        int[] deluxeRooms = new int[3];    
+
+        int choice;
+
+        do {
+            System.out.println("\n===== Hotel Reservation System =====");
+            System.out.println("1. View Available Rooms");
+            System.out.println("2. Book a Room");
+            System.out.println("3. View Booking Details");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            choice = input.nextInt();
+
+            switch (choice) {
+                case 1:
+                    viewAvailableRooms(standardRooms, deluxeRooms);
+                    break;
+                case 2:
+                    bookRoomWithPayment(input, standardRooms, deluxeRooms);
+                    break;
+                case 3:
+                    viewBookingDetails(standardRooms, deluxeRooms);
+                    break;
+                case 4:
+                    System.out.println("Thank you for using the system!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+
+        } while (choice != 4);
+
+        input.close();
+    }
+
+    static void viewAvailableRooms(int[] standard, int[] deluxe) {
+        System.out.println("\nAvailable Standard Rooms (1-5):");
+        for (int i = 0; i < standard.length; i++) {
+            if (standard[i] == 0)
+                System.out.print((i + 1) + " ");
+        }
+
+        System.out.println("\nAvailable Deluxe Rooms (6-8):");
+        for (int i = 0; i < deluxe.length; i++) {
+            if (deluxe[i] == 0)
+                System.out.print((i + 6) + " ");
+        }
+        System.out.println();
+    }
+
+    static void bookRoomWithPayment(Scanner input, int[] standard, int[] deluxe) {
+        System.out.print("\nEnter room number to book (1-8): ");
+        int room = input.nextInt();
+        int price = 0;
+        boolean booked = false;
+
+        if (room >= 1 && room <= 5) {
+            if (standard[room - 1] == 0) {
+                price = 1000;
+                standard[room - 1] = 1;
+                booked = true;
+                System.out.println("Standard Room " + room + " selected.");
+            } else {
+                System.out.println("Room already booked.");
+            }
+        } else if (room >= 6 && room <= 8) {
+            if (deluxe[room - 6] == 0) {
+                price = 2000;
+                deluxe[room - 6] = 1;
+                booked = true;
+                System.out.println("Deluxe Room " + room + " selected.");
+            } else {
+                System.out.println("Room already booked.");
+            }
+        } else {
+            System.out.println("Invalid room number.");
+        }
+
+        if (booked) {
+            
+            System.out.println("Room Price: ₹" + price);
+            System.out.println("Choose Payment Method:");
+            System.out.println("1. UPI");
+            System.out.println("2. Card");
+            System.out.println("3. Cash");
+            System.out.print("Enter choice: ");
+            int method = input.nextInt();
+
+            String paymentMethod = switch (method) {
+                case 1 -> "UPI";
+                case 2 -> "Card";
+                case 3 -> "Cash";
+                default -> "Unknown";
+            };
+
+            System.out.println("Processing payment via " + paymentMethod + "...");
+            System.out.println("Payment of ₹" + price + " Successful!");
+            System.out.println("Room " + room + " Booked Successfully.\n");
+        }
+    }
+
+    static void viewBookingDetails(int[] standard, int[] deluxe) {
+        System.out.println("\nBooked Standard Rooms:");
+        for (int i = 0; i < standard.length; i++) {
+            if (standard[i] == 1)
+                System.out.print((i + 1) + " ");
+        }
+
+        System.out.println("\nBooked Deluxe Rooms:");
+        for (int i = 0; i < deluxe.length; i++) {
+            if (deluxe[i] == 1)
+                System.out.print((i + 6) + " ");
+        }
+        System.out.println();
+    }
+}
